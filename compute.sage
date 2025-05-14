@@ -40,8 +40,7 @@ def get_a(K, l, chi, n):
         for p,_ in factor(D_pm):
             ret_ *= chi_decomp[p]
         return ret_.primitive_character()
-    # Now compute the summation
-    # print('entering summation............')
+
     ret = 0
     for D1 in divisors(D):
         D2 = D // D1
@@ -49,7 +48,6 @@ def get_a(K, l, chi, n):
         chi2 = get_chi_decomp(D2)
         chi1_bar = chi1.bar()
         chi2_bar = chi2.bar()
-        # print('computed chi decomp')
         in_sum = 0
         for a1 in range(n*D2+1):
             a2 = n*D2 - a1
@@ -96,10 +94,7 @@ def get_b(K, l, chi, n):
 
 
 def verify_form(coeffs, K):
-    # col = vector([QQ(z) for z in lst])
     col = vector(coeffs)
-    print('Checking that the list of coefficients actually lies in S_K')
-    print('coeffs =', col)
     if K <= 10 or K == 14:
         return all(aa == 0 for aa in coeffs)
     prec = len(coeffs)
@@ -120,7 +115,7 @@ def verify_form(coeffs, K):
 
 
 
-def test_coeff_formulas(D, K, typ):
+def compute_coeff_formulas(D, K, typ):
     if   typ == 'a':
         _0_4 = 0
         get_ab = get_a
@@ -135,21 +130,20 @@ def test_coeff_formulas(D, K, typ):
         for chi in prim_chars:
             if chi(-1) != (-1)^l: 
                 continue
-            print(f'[{typ}] K={K}, l={l}, chi={chi}')
             coeffs = [get_ab(K,l,chi,n) for n in range(1,prec+1)]
+            print(f'[{typ}] K={K}, l={l}, chi={chi}')
+            print('coeffs =', coeffs)
             assert verify_form(coeffs, K)
     
 
 
-def run_tests(K_UB, D_UB, typ):
-    #for K in range(8, K_UB+1, 2):
-    #    for D in range(1, D_UB+1):
+def compute_coeffs(K_UB, D_UB, typ):
     for K in range(8, K_UB+1, 2):
-        for D in range(1, D_UB+1):
-            if D % 2 == 0 or not is_squarefree(D):
+        for D in range(1, D_UB+1, 2):
+            if not is_squarefree(D):
                 continue
-            print(f'TESTING: K={K}, D={D} ###################################')
-            test_coeff_formulas(D, K, typ)
+            print(f'COEFFICIENTS FOR: K={K}, D={D} ##########################')
+            compute_coeff_formulas(D, K, typ)
 
 
 
@@ -238,16 +232,15 @@ def compute_dets_chi(K_UB, D_UB, typ):
 
 PARAM = sys.argv[1]
 K_UB, D_UB = int(sys.argv[2]), int(sys.argv[3])
-if PARAM in ['test_a', 'test_b']:
-    run_tests(K_UB, D_UB, typ=PARAM[-1])
-    # RUN WITH: 'test_a 28 15'
-    # RUN WITH: 'test_a 16 61'
+if PARAM in ['coeffs_a', 'coeffs_b']:
+    compute_coeffs(K_UB, D_UB, typ=PARAM[-1])
+    # RUN WITH: 'coeffs_a 16 15'
 elif PARAM in ['dets_l_a', 'dets_l_b']: 
     compute_dets_l(K_UB, D_UB, typ=PARAM[-1])
-    # RUN_WITH: 'dets_l_a 70 70'
+    # RUN_WITH: 'dets_l_a 50 50'
 elif PARAM in ['dets_chi_a', 'dets_chi_b']: 
     compute_dets_chi(K_UB, D_UB, typ=PARAM[-1])
-    # RUN_WITH: 'dets_chi_a 70 70'
+    # RUN_WITH: 'dets_chi_a 50 50'
 else: 
     assert False, 'invalid PARAM'
 
