@@ -237,10 +237,10 @@ if PARAM in ['coeffs_a', 'coeffs_b']:
     # RUN WITH: 'coeffs_a 16 15'
 elif PARAM in ['dets_l_a', 'dets_l_b']: 
     compute_dets_l(K_UB, D_UB, typ=PARAM[-1])
-    # RUN_WITH: 'dets_l_a 50 50'
+    # RUN_WITH: 'dets_l_a 40 40'
 elif PARAM in ['dets_chi_a', 'dets_chi_b']: 
     compute_dets_chi(K_UB, D_UB, typ=PARAM[-1])
-    # RUN_WITH: 'dets_chi_a 50 50'
+    # RUN_WITH: 'dets_chi_a 40 40'
 else: 
     assert False, 'invalid PARAM'
 
