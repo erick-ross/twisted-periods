@@ -1,6 +1,6 @@
-# Twisted Periods
+# Code for nonsingularity of matrices that are related to twisted periods.
 
-This repository contains code to supprt the paper [Twisted Periods of Modular Forms]().
+This repository contains code to supprt the paper [Twisted Periods of Modular Forms](https://arxiv.org/abs/2507.17041).
 In particular, we verified Conjectures 6.1 - 6.4 for `D,K <= 40`.
 One can run the code by the following:
 
